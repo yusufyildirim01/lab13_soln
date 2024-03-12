@@ -30,7 +30,7 @@ of lists. Below are examples of both:
       | [] -> 0
       | hd :: tl -> hd + sum tl ;;
 
-As noted in the book, these functional recursive implementations
+As noted in the textbook, these functional recursive implementations
 may run into stack overflow errors when called on exceptionally long
 lists. 
 
@@ -214,23 +214,23 @@ procedural programming.
 Let's get some practice with simple loops.
 
 ......................................................................
-Exercise 5: Write two non-recursive functions, `odd_while` and
-`odd_for`, that use `while` and `for` loops, respectively, to return a
+Exercise 5: Write two non-recursive functions, `odds_while` and
+`odds_for`, that use `while` and `for` loops, respectively, to return a
 list of all positive odd numbers less than or equal to a given
 int. (Don't worry about dealing with negative arguments.)
 
 For example, we expect the following behavior:
 
-  # odd_while 10
+  # odds_while 10
   - : int list = [1; 3; 5; 7; 9]
-  # odd_for 7
+  # odds_for 7
   - : int list = [1; 3; 5; 7]
 ....................................................................*)
 
 (* There are many ways to solve this problem with `while` or `for`
    loops. We've provided typical examples. *)
     
-let odd_while (limit : int) : int list =
+let odds_while (limit : int) : int list =
   let counter = ref 1 in
   let lst_ref = ref [] in
   while !counter <= limit do
@@ -239,7 +239,7 @@ let odd_while (limit : int) : int list =
   done;
   List.rev !lst_ref ;;
   
-let odd_for (limit : int) : int list =
+let odds_for (limit : int) : int list =
   let lst_ref = ref [] in
   for i = 1 to (limit + 1) / 2 do
     lst_ref := (i - 1) * 2 + 1 :: !lst_ref
@@ -249,36 +249,40 @@ let odd_for (limit : int) : int list =
 (* For contrast, here are some ways of implementing this function in
    a functional paradigm. First, a directly recursive version: *)
   
-let odd_func (limit : int) : int list =
-  let rec odd_from lower =
+let odds_func (limit : int) : int list =
+  let rec odds_from lower =
     if lower > limit then []
-    else lower :: odd_from (lower + 2) in
-  odd_from 1 ;;
+    else lower :: odds_from (lower + 2) in
+  odds_from 1 ;;
 
 (* We can replace the auxiliary function with a tail-recursive version
    using an accumulator, so it can handle large lists without stack
    overflows. *)
   
-let odd_func_tr (limit : int) : int list =
-  let rec odd_from lower accum =
+let odds_func_tr (limit : int) : int list =
+  let rec odds_from lower accum =
     if lower > limit then accum
-    else odd_from (lower + 2) (lower :: accum) in
-  List.rev (odd_from 1 []) ;;
+    else odds_from (lower + 2) (lower :: accum) in
+  List.rev (odds_from 1 []) ;;
   
 (* Here's another functional version using `init` to build a list of
    the integers and `filter` to select the odd ones: *)
   
-let odd_func_2 (limit : int) : int list =
+let odds_func_2 (limit : int) : int list =
   List.init limit succ
   |> List.filter (fun x -> x mod 2 <> 0) ;;
 
 (* ...and here's a functional version that just uses `init`: *)
   
-let odd_func_3 (limit : int) : int list =
+let odds_func_3 (limit : int) : int list =
   List.init ((limit + 1) / 2) (fun n -> n * 2 + 1) ;;
 
-(* Here is the `length` function implemented using a `while` loop, as
-in the reading:
+(*....................................................................
+Exercise 6: Rewrite the functional recursive `sum` function from above
+using a `while` loop.
+
+For reference, here is the `length` function implemented using a
+`while` loop, as in the reading:
 
     let length_iter (lst : 'a list) : int =
       let counter = ref 0 in        (* initialize the counter *)
@@ -292,10 +296,6 @@ in the reading:
 Note that both the counter for the loop and the list need to be
 references. Otherwise, their values can't be changed and the loop
 will never terminate.
-
-......................................................................
-Exercise 6: Rewrite the functional recursive `sum` function from above
-using a `while` loop.
 ....................................................................*)
 
 let sum_iter (lst : int list) : int =
@@ -385,7 +385,7 @@ https://docs.cs50.net/2017/ap/problems/mario/less/mario.html.) *)
 (*....................................................................
 Exercise 9: Implement a function in the procedural paradigm that
 prints out a half-pyramid of a specified height, per the below. Use
-hashes (#) for blocks. The function should raise an Invalid_argument
+hashes (#) for blocks. The function should raise an `Invalid_argument`
 exception for heights greater than 23. (Why? I don't know. That's just
 how CS50 did it.)
 
