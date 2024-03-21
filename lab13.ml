@@ -180,8 +180,8 @@ let prods_opt (xs : int list) (ys : int list) : int list option =
       with
       | Failure _ -> None ;;
 
-   This is itself tail-recursive (vacuously, since it's not recursive
-   at all!), and it calls only tail-recursive functions. *)
+   This is itself tail-recursive since it's not recursive at all (!),
+   and it calls only tail-recursive functions. *)
 
 (*....................................................................
 Exercise 4: Finally, combine your `sum` and `prods` functions to
@@ -197,7 +197,7 @@ let dotprod (xs : int list) (ys : int list) : int =
    sense is it "tail-recursive"? The operation over the elements of
    the lists -- whether by iteration or recursion -- is hidden inside
    the functions that `dotprod` calls. Thus, those functions determine
-   whether the implementation is iterative or recursive or
+   whether the implementation is iterative or non-tail-recursive or
    tail-recursive. In this case, since the implementations of `sum`
    and `dotprod` are tail-recursive, `dotprod` inherits the advantages
    of that approach, in particular, its space efficiency. *)
